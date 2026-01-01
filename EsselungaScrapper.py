@@ -49,7 +49,8 @@ def Main(ProdObject):
     chrome_options.add_argument("--no-default-browser-check")   
     chrome_options.add_argument("--disable-search-engine-choice-screen")
 
-    service = Service(executable_path='C:/Users/leona/Desktop/ML stuff/chromedriver-win64/chromedriver.exe')
+    service = Service(executable_path='C:/Users/info/Documents/chromedriver.exe')
+
     driver = webdriver.Chrome(service=service, options=chrome_options)
     driver.get(ProdObject.ProductsPage)
     

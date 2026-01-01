@@ -1,9 +1,6 @@
 import sqlite3
 from datetime import date
 from models import Prod, Indicators
-import pandas as pd
-
-
 
 def InsertProds(prod, ScrapeID): ###This inserts the theoreticaly Static  names (prods and indicators)
     #print("here2")
@@ -131,71 +128,10 @@ def InsertIndices(Info, ScrapeID):##This Will insert the non static values (prod
     conn.close()
 
 
-def InsertWeather(Info, ScrapeID):
-    # Ensure the 'date' column is in the correct format
-    Info['date'] = pd.to_datetime(Info['date']).dt.strftime('%Y-%m-%d')
-    # Replace NaN with None
-    Info = Info.where(pd.notnull(Info), None)
 
-    conn = sqlite3.connect('scraped_data.db')
-    cursor = conn.cursor()
-    cursor.execute("PRAGMA foreign_keys = ON;")
-    
 
-    # Prepare data for batch insertion
-    weather_data_list = []
-
-    for index, row in Info.iterrows():
-        weather_data_list.append((
-            ScrapeID,
-            row['date'],
-            row.get('weather_code'),
-            row.get('temperature_2m_max'),
-            row.get('temperature_2m_min'),
-            row.get('apparent_temperature_max'),
-            row.get('apparent_temperature_min'),
-            row.get('daylight_duration'),
-            row.get('sunshine_duration'),
-            row.get('uv_index_max'),
-            row.get('precipitation_sum'),
-            row.get('rain_sum'),
-            row.get('showers_sum'),
-            row.get('precipitation_hours'),
-            row.get('precipitation_probability_max'),
-            row.get('wind_speed_10m_max'),
-            row.get('wind_gusts_10m_max')
-        ))
-
-    # Define the SQL insert statement
-    insert_query = """
-        INSERT INTO WeatherData (
-            ScrapeID,
-            Date,
-            weather_code,
-            temperature_2m_max,
-            temperature_2m_min,
-            apparent_temperature_max,
-            apparent_temperature_min,
-            daylight_duration,
-            sunshine_duration,
-            uv_index_max,
-            precipitation_sum,
-            rain_sum,
-            showers_sum,
-            precipitation_hours,
-            precipitation_probability_max,
-            wind_speed_10m_max,
-            wind_gusts_10m_max
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    """
-
-    # Execute the batch insertion
-    cursor.executemany(insert_query, weather_data_list)
-    conn.commit()
-    conn.close()
-
-###Need to pass Products, list of lists. Products prices, list of lists. Indicator names, list of lsits. 
-###Insert Indicator values, lsit of lists. Insert weather data
+###Need to pass Products, list of lists. Products prices, list of lists. Indicator names, list of lsits.
+###Insert Indicator values, list of lists.
 
 
 def Insert(Info, ScrapeID):
@@ -204,8 +140,6 @@ def Insert(Info, ScrapeID):
         InsertProds(Info, ScrapeID)
     elif isinstance(Info, Indicators):
         InsertIndices(Info, ScrapeID)
-    elif isinstance(Info, pd.DataFrame):
-        InsertWeather(Info, ScrapeID)
     else:
         print(f"Unknown data type: {type(Info)}")
 
@@ -220,7 +154,7 @@ def Insert(Info, ScrapeID):
     #         test = Info.Category
     #         InsertIndices(Info, ScrapeID)
     #     except:
-    #         InsertWeather(Info, ScrapeID)
+    #         pass
     
         
     

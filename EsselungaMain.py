@@ -10,7 +10,6 @@ import sqlite3
 import EsselungaScrapper
 import AuxiliaryData
 import InsertTodb
-import pandas as pd
 from datetime import date
 from models import Prod
 import time
@@ -68,7 +67,6 @@ objects_list = [
 ]
 
 Indices = AuxiliaryData.FindEconomicData()
-weather = AuxiliaryData.FindWeatherData()
 
 
 
@@ -95,8 +93,7 @@ for objects in objects_list:
 
 for index in Indices:
     InsertTodb.Insert(index, scrape_id)
-##Inser Auxiliary scrapes
-InsertTodb.Insert(weather, scrape_id)
+## Insert auxiliary scrapes (economic indices only)
 
 end = time.time()
 print("total time taken = ",end - start)

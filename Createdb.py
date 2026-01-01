@@ -83,30 +83,7 @@ CREATE TABLE IF NOT EXISTS IndicatorValues (
 );
 """)
 
-# Create the WeatherData table
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS WeatherData (
-    WeatherDataID INTEGER PRIMARY KEY AUTOINCREMENT,
-    ScrapeID INTEGER NOT NULL,
-    Date DATE NOT NULL,
-    weather_code INTEGER,
-    temperature_2m_max REAL,
-    temperature_2m_min REAL,
-    apparent_temperature_max REAL,
-    apparent_temperature_min REAL,
-    daylight_duration REAL,
-    sunshine_duration REAL,
-    uv_index_max REAL,
-    precipitation_sum REAL,
-    rain_sum REAL,
-    showers_sum REAL,
-    precipitation_hours REAL,
-    precipitation_probability_max REAL,
-    wind_speed_10m_max REAL,
-    wind_gusts_10m_max REAL,
-    FOREIGN KEY (ScrapeID) REFERENCES ScrapeRuns(ScrapeID)
-);
-""")
+# (Removed unused auxiliary table in prior refactor)
 
 # Commit the changes and close the connection
 conn.commit()
